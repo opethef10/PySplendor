@@ -1,0 +1,5 @@
+AI1: 1565, Total Games: 121, Win: 52, Lose: 69
+AI4: 1511, Total Games: 6, Win: 3, Lose: 3
+AI2: 1505, Total Games: 117, Win: 41, Lose: 76
+AI3: 1469, Total Games: 67, Win: 13, Lose: 54
+Player1: 1466, Total Games: 2, Win: 0, Lose: 2
