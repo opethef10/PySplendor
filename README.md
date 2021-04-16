@@ -1,15 +1,15 @@
 # PySplendor
 Splendor game in command line interface.
 
-### Dependencies
+## Dependencies
 - Written in Python 3.8
 - Works with Python 3.7+
 - No external libraries needed.
 
-### How to Run
+## How to Run
 - Download/clone this repository and run [\_\_main\_\_.py](__main__.py) with Python.
 
-### How to Play?
+## How to Play?
 This game is based in Splendor. You can learn the actual rules of the game from [here.](https://www.ultraboardgames.com/splendor/game-rules.php)  
 Inside this command line game, you can perform 6 different actions: 
 * take gems, reserve card, purchase card, purchase hand card, quit, see help.  
