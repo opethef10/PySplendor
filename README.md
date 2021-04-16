@@ -45,8 +45,10 @@ Whenever a prompt asks you to type an input, type one of these actions.
 **quit**: Quit game  
 **help**: Show help text (you can see this help document inside game whenever you need) 
 
-In addition to game related actions, you can type these options whenever a prompt comes (even right before the game when it says press ENTER to start game):  
-> **emoji1**: Enable the emoji mode. Color emojis are shown instead of gem names "r, g, b, w, k". By default, emojis are enabled.  
-**emoji0**: Disable the emoji mode. Gems are shown by chars "r, g, b, w, k".  
-**sleep1**: AI thinking time is set to 0.2 seconds. Default option.  
-**sleep0**: AI thinking time is disabled. Practically it's 0 seconds. Although it's not recommended in order to follow the game, you can use this option for AI vs AI fights.  
+---
+
+In addition to game related actions, you can type these options whenever a prompt comes (even right before the game when it says "press ENTER to start game"):  
+- **emoji1**: Enable the emoji mode. Color emojis are shown instead of gem names "r, g, b, w, k". By default, emojis are enabled.  
+- **emoji0**: Disable the emoji mode. Gems are shown by chars "r, g, b, w, k".  
+- **sleep1**: AI thinking time is set to 0.2 seconds. Default option.  
+- **sleep0**: AI thinking time is disabled. Practically it's 0 seconds. Although it's not recommended in order to follow the game, you can use this option for AI vs AI fights.  
