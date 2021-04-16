@@ -57,8 +57,6 @@ In addition to game related actions, you can type these options whenever a promp
 - **sleep1**: AI thinking time is set to 0.2 seconds. Default option.  
 - **sleep0**: AI thinking time is disabled. Practically it's 0 seconds. Although it's not recommended in order to follow the game, you can use this option for AI vs AI fights.
 
-## AI
-AI in this game is very basic and open for improving.  
-For now it traverses all open cards and gives action scores to them.  
-- If a card is affordable and there is no high score cards which requires little gems, then taking new gems for high score cards are preferred.
-- 
+## Features
+- A basic one-move-foreseeing AI, which is open for improving.
+- Elo scoring system, which you may be familiar from chess, is used for players and account data is stored in Accounts folder.
