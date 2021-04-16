@@ -11,6 +11,10 @@ Splendor game in command line interface.
 
 ## How to Play?
 This game is based in Splendor. You can learn the actual rules of the game from [here.](https://www.ultraboardgames.com/splendor/game-rules.php)  
+The differences with original game are:  
+- Reserved cards aren't hidden.
+- You can't choose a noble when there is more than one eligible noble deserved.
+- In addition to the 15 point game option, there is also a 21 point game option.
 
 Inside this command line game, you can perform 6 different actions: 
 * take gems, reserve card, purchase card, purchase hand card, quit, see help.  
@@ -51,4 +55,10 @@ In addition to game related actions, you can type these options whenever a promp
 - **emoji1**: Enable the emoji mode. Color emojis are shown instead of gem names "r, g, b, w, k". By default, emojis are enabled.  
 - **emoji0**: Disable the emoji mode. Gems are shown by chars "r, g, b, w, k".  
 - **sleep1**: AI thinking time is set to 0.2 seconds. Default option.  
-- **sleep0**: AI thinking time is disabled. Practically it's 0 seconds. Although it's not recommended in order to follow the game, you can use this option for AI vs AI fights.  
+- **sleep0**: AI thinking time is disabled. Practically it's 0 seconds. Although it's not recommended in order to follow the game, you can use this option for AI vs AI fights.
+
+## AI
+AI in this game is very basic and open for improving.  
+For now it traverses all open cards and gives action scores to them.  
+- If a card is affordable and there is no high score cards which requires little gems, then taking new gems for high score cards are preferred.
+- 
