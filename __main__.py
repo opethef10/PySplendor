@@ -1,48 +1,38 @@
-from SplendorGame import SplendorGame
+"""\
+PySplendor: Splendor board game in command line interface
+This file parses command line arguments and passes them to CmdUtil
+"""
 
-#--------------- CREATE GAME ---------------#
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from cmdutil import CmdUtil
+VERSION = "PySplendor 0.9"
 
-while True: #check for invalid inputs
-    try:
-        total=int(input("How many players are there in this game? (type 2, 3 or 4): "))
-        assert total in (2,3,4)
-        break
-    except (AssertionError,ValueError):
-        print(f"Invalid input! Try again\n")
-        
-while True: #check for invalid inputs 
-    try:
-        ai=int(input(f"How many of them are AI: (type {str(tuple(range(total+1)))[1:-4]} or {total}): "))
-        assert 0<=ai<=total
-        human=total-ai
-        break
-    except (AssertionError,ValueError):
-        print(f"Invalid input! Try again\n")        
-        
-while True: #check for invalid inputs 
-    try:
-        winScore=int(input("What is win score? (type 15 or 21): "))
-        assert winScore in (15,21)
-        break
-    except (AssertionError,ValueError):
-        print(f"Invalid input! Try again\n")
+if __name__ == "__main__":
+    parser = ArgumentParser(
+        prog="PySplendor",
+        description="Splendor board game in command line interface",
+        formatter_class=ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument('-v', '--version', action='version', version=VERSION)
+    parser.add_argument('human', metavar='human', type=int, nargs='?', choices=range(5), default=1,
+                        help='Type number of human players [between 0-4]')
+    parser.add_argument('ai', metavar='ai', type=int, nargs='?', choices=range(5), default=1,
+                        help='Type number of AI players [between 0-4]')
+    parser.add_argument('score', metavar='score', type=int, nargs='?', choices=[15, 21], default=15,
+                        help='Type the win score [either 15 or 21]')
+    parser.add_argument('--emoji', dest='emoji', action='store_true', help='Sets emoji setting True (default)')
+    parser.add_argument('--no-emoji', dest='emoji', action='store_false', help='Sets emoji setting False')
+    parser.set_defaults(emoji=True)
+    parser.add_argument('--sleep', type=float, default=0.2,
+                        help='Enter AI sleep parameter in range [0.0, 1.0]')
+    args = parser.parse_args()
 
-game=SplendorGame(human,ai,winScore) #construct a Splendor game, rules will differ depending on total number of players
-game.start()
+    if not 2 <= args.human + args.ai <= 4:
+        parser.error("Total player number should be between 2 and 4")
 
-#----------------- GAME LOOP -----------------#
+    if not 0 <= args.sleep <= 0.5:
+        parser.error("Sleep duration should be between 0 and 0.5 second")
 
-while not game.checkWin(): #play until someone wins
-    for player in game.players:   
-        print(game) #print current state of the game
-        moveSet = player.possibleMoves(game) #move set for AI
-        while True: # check for invalid action inputs
-            try:
-                actionString=player.getInput(moveSet) #for human, enter input; for AI, it will return the string of the best move from moveSet
-                game.doAction(player,actionString)
-                break
-            except AttributeError as err:
-                print(err)
-
-print(game)
-game.printResults()
+    # Pass arguments to CmdUtil and start the command line loop
+    app = CmdUtil(args.human, args.ai, args.score, args.emoji, args.sleep)
+    app.cmdloop()
