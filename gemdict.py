@@ -1,19 +1,21 @@
 from collections import Counter
 
-GOLD_GEM = 'y'
-COLORED_GEMS = 'r', 'g', 'b', 'w', 'k'
-ALL_GEMS = COLORED_GEMS + tuple(GOLD_GEM)
-COLORS = "❤", "🍏", "💧", "⚪", "🏴", "⭐"
+from termcolor import colored
+import colorama
+colorama.init(strip=False)
+
+ALL_GEMS = 'r', 'g', 'b', 'w', 'k', 'y'
+COLORS = "red", "green", "blue", "white", "grey", "yellow"
+COLORDICT = dict(zip(ALL_GEMS, COLORS))
+COLORED_GEMS, GOLD_GEM = ALL_GEMS[:-1], ALL_GEMS[-1]
 
 
 class GemDict(Counter):
     """Counter of gems with count (or price) each"""
-    emoji = True
+    shape = "◉"
         
     def __str__(self):
-        def map_color(gem):
-            return COLORS[ALL_GEMS.index(gem)] if self.emoji else gem
-        return " ".join(str(amount) + map_color(gem) for gem, amount in self.items())
+        return " ".join(amount * self.map_color(gem, self.shape) for gem, amount in self.items() if amount)
 
     def __add__(self, other):
         result = super().__add__(other)
@@ -22,6 +24,10 @@ class GemDict(Counter):
     def __sub__(self, other):
         result = super().__sub__(other)
         return GemDict(result)
+
+    @staticmethod
+    def map_color(gem, shape):
+        return colored(shape, COLORDICT[gem], attrs=["bold"])
 
     def total(self):
         """Total count of all gems in set"""

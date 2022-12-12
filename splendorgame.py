@@ -1,60 +1,48 @@
 """Main game logic for Splendor board game"""
 
-from dataclasses import dataclass
 from itertools import combinations, cycle
 from random import shuffle
 
 from card import Card
 from gemdict import GemDict, GOLD_GEM
 from noble import Noble
-from player import Player, HumanPlayer, AIPlayer
+from player import HumanPlayer, AIPlayer
 from rules import Rules
 
 
-@dataclass
 class SplendorGame:
-    human: int = 0
-    ai: int = 2
-    winScore: int = 21
-    rules: Rules = ...
-    nobles: list[Noble] = ...
-    decks: list[list[Card]] = ...
-    cards: list[list[Card]] = ...
-    gems: GemDict = ...
-    players: list[Player] = ...
-    turn: int = 1
-    currentPlayer: Player = ...
-
-    def __post_init__(self):
-        super().__init__()
-        self.rules = Rules(self.human + self.ai, self.winScore)
+    def __init__(self, human, ai, win_score):
+        self.rules = Rules(human + ai, win_score)
         self.nobles = Noble.get_nobles(self.rules.NOBLE_AMOUNT)
         self.decks, self.cards = Card.get_cards(self.rules.OPEN_CARDS_PER_LEVEL)
         self.gems = GemDict.from_rules(self.rules.MAX_GEMS_IN_STACK, self.rules.MAX_GOLD)
         self.players = [
-            HumanPlayer(f"Player{number + 1}") for number in range(self.human)] + [
-            AIPlayer(f"AI{number + 1}") for number in range(self.ai)
+            HumanPlayer(f"Player{number + 1}") for number in range(human)] + [
+            AIPlayer(f"AI{number + 1}") for number in range(ai)
         ]
         shuffle(self.players)
+
+        self.turn = 1
         self._playerIterator = cycle(self.players)
         self.currentPlayer = next(self._playerIterator)
 
-    def __repr__(self):
-        return f"<SplendorGame with {self.human} human, {self.ai} AI players with winning score {self.winScore}>"
-
     def __str__(self):
-        st = "##################################################\n"
-        st += f"TURN:{self.turn}, PLAYER:{self.currentPlayer.name}\n"
-        st += f"NOBLES: {' '.join(str(noble) for noble in self.nobles)}\n"
+        st = "\n"
+        st += f"TURN {self.turn}".center(60, "=") + "\n\n"
+        st += f"Current player: {self.currentPlayer.name}\n"
+        st += f"Nobles: {' '.join(str(noble) for noble in self.nobles)}\n"
+        st += f"Board gems: {self.gems}\n\n"
+        st += "# color value  price\n"
         for level, levelCards in reversed(list(enumerate(self.cards))):
-            st += f"LVL{level+1}({len(self.decks[level])}): "
-            st += f"{' '.join(map(str, levelCards))}\n"
+            st += f"Level {level+1} Cards ({len(self.decks[level])} left)".center(60, "-") + "\n"
+            st += '\n'.join(f"{idx}: {card}" for idx, card in enumerate(levelCards, 1))
+            st += '\n'
         st += '\n'
-        st += f"GEMS: {self.gems}\n\n"
 
         for player in self.players:
             st += f"{player}\n"
-        st += "##################################################"
+        st += "".center(60, "=")
+        st += "\n"
         return st
 
     def new_table_card(self, level, pos):
