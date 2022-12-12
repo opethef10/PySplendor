@@ -23,12 +23,14 @@ class Player:
 
     def __post_init__(self):
         self.account = Account.load(self.name)
+        self.purchasedCards.shape = "▮"
 
     def __str__(self):
         st = f"{self.name} ({self.account.elo}) | {self.score} points\n"
         st += f"purchased: {self.purchasedCards}\n"
         st += f"gems: {self.gems} ({self.gems.total()})\n"
-        st += f"hand: {' '.join(map(str, self.handCards))}\n"
+        st += f"reserved:\n"
+        st += '\n'.join(f"{idx}: {card}" for idx, card in enumerate(self.handCards, 1)) + "\n"
         return st
 
     @property
@@ -126,7 +128,7 @@ class Player:
             game.new_table_card(level, pos)
         self.get_noble(game.nobles)  # try to get noble
 
-    def get_noble(self, nobles: list[Noble]):
+    def get_noble(self, nobles):
         """Attempts to acquire noble card. In case of success removes taken noble from input list"""
         eligible_nobles = [noble for noble in nobles if not noble.price - self.purchasedCards]
         if eligible_nobles:

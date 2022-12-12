@@ -1,13 +1,14 @@
 # PySplendor
-Splendor game in command line interface.
+Splendor board game in command line interface.
 
 ## Dependencies
-- Written in Python 3.9
-- Works with Python 3.9+
-- No external libraries needed.
+- Works with Python 3.7+
+- Termcolor and Colorama external libraries are used for command line coloring
 
 ## How to Run
-- Download/clone this repository and run [\_\_main\_\_.py](__main__.py) with Python.
+- Download/clone this repository
+- Install dependencies with ```pip install -r requirements.txt```
+- run [\_\_main\_\_.py](__main__.py) with Python.
 
 ## How to Play?
 This game is based in Splendor. You can learn the actual rules of the game from [here.](https://www.ultraboardgames.com/splendor/game-rules.php)  
@@ -16,8 +17,12 @@ The differences with original game are:
 - You can't choose a noble when there is more than one eligible noble deserved, it's randomly given to you.
 - In addition to the 15 point game option, there is also a 21 point game option.
 
-Inside this command line game, you can perform 6 different actions: 
-* take gems, reserve card, purchase card, purchase hand card, quit, see help.  
+## In Game Screenshot
+![](screenshot.png)
+
+## Game Actions
+Inside this command line game, you can perform 7 different actions: 
+* take gems, reserve card, purchase card, purchase hand card, set AI sleep setting, quit, see help.  
 
 Whenever a prompt asks you to type an input, type one of these actions.
 
@@ -45,16 +50,11 @@ Whenever a prompt asks you to type an input, type one of these actions.
 - "X" is digits from 1 to 3
 - **EXAMPLE INPUT**: "hand 1" means purchase 1st card in your hand (the cards you already reserved)
 - You **MUST** enter **ONE** number after "h"
-    
+
+**sleep X**: Set AI sleep time in range of \[0.0, 0.5\] seconds. Default is 0.2 seconds. Without any argument, prints the current setting. Although setting it to 0 seconds not recommended, in order to follow the game, you can use this option for AI vs AI fights.
+
 **quit**: Quit game  
-**help**: Show help text (you can see this help document inside game whenever you need) 
-
----
-
-In addition to game related actions, you can type these options whenever a prompt comes (even right before the game when it says "press ENTER to start game"):  
-- **emoji 1**: Enable the emoji mode. Color emojis are shown instead of gem names "r, g, b, w, k". By default, emojis are enabled.  
-- **emoji 0**: Disable the emoji mode. Gems are shown by chars "r, g, b, w, k".  
-- **sleep X**: Set AI sleep time in range of \[0.0, 0.5\] seconds. Default is 0.2 seconds. Although setting it to 0 seconds not recommended, in order to follow the game, you can use this option for AI vs AI fights.
+**help**: Show help for each command 
 
 ## Features
 - A basic one-move-foreseeing AI, which is open for improving.

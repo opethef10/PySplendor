@@ -4,24 +4,17 @@ Parsed commands then do the actions and affects the game state
 """
 
 from cmd import Cmd
-from pathlib import Path
 
 from splendorgame import SplendorGame
-from gemdict import GemDict
 from player import Player
-
-HELP_PATH = Path(__file__).with_name("help.txt")
-PROMPT = "(Splendor) "
 
 
 class CmdUtil(Cmd):
-    def __init__(self, human, ai, score, emoji_flag, sleep):
+    def __init__(self, human, ai, score, sleep):
         super().__init__()
-        self.prompt = PROMPT
         self.game = SplendorGame(human, ai, score)
-        self.HELP_STR = HELP_PATH.read_text()
+        self.prompt = f"({self.game.currentPlayer.name}) "
         self.cmdqueue = self.game.currentPlayer.possible_moves(self.game)
-        GemDict.emoji = emoji_flag
         Player.sleepTime = sleep
 
     def onecmd(self, line):
@@ -29,7 +22,7 @@ class CmdUtil(Cmd):
         try:
             return super().onecmd(line)
         except ValueError as valueError:
-            print("valueError:", valueError)
+            print("*** PySplendor:", valueError)
 
     def precmd(self, line):
         """For AI player give them some time to think"""
@@ -40,10 +33,12 @@ class CmdUtil(Cmd):
         """Print game state when an action is completed correctly. """
         """Change the move count and reset the possible moves for AI"""
         if correct_input:
-            print(self.game)
             if self.game.check_win():
+                print(self.game)
                 return True
             self.game.move_to_next()
+            print(self.game)
+            self.prompt = f"({self.game.currentPlayer.name}) "
             self.cmdqueue = self.game.currentPlayer.possible_moves(self.game)
 
     def preloop(self):
@@ -59,59 +54,76 @@ class CmdUtil(Cmd):
     def emptyline(self):
         """Ignore when an empty prompt is sent"""
 
-    def do_help(self, _):
-        print(self.HELP_STR)
+    # def do_help(self, _):
+        # print(self.HELP_STR)
 
     def do_exit(self, _):
+        """Exit the game"""
         raise SystemExit()
 
     do_quit = do_EOF = do_exit
 
-    def do_print_game(self, _):
+    def do_print(self, _):
+        """Print the current game state"""
         print(self.game)
 
     def do_take(self, action_string):
-        """Parse action string and do the 'take' action for the current player"""
+        """Usage: take XXX
+        "X" are chars: 'r','g','b','w','k' (red, green, blue, white, black) which represents colors of gems
+        EXAMPLE INPUT: "take rgb" means take red, green and blue
+        EXAMPLE INPUT: "take ww" means take two white gems
+        EXAMPLE INPUT: "take b" means take one blue gem
+        You can enter from 0 to 3 characters after "take"
+        Typing only "take" means 'pass'
+        """
+    
         gem_lst = list(action_string)
         self.game.currentPlayer.take_gems(self.game, gem_lst)
         return True
 
     def do_reserve(self, action_string):
-        """Parse action string and do the 'reserve' action for the current player"""
+        """Usage: reserve XY
+        "X" is digit from 1 to 3
+        "Y" is digit from 0 to 3
+        EXAMPLE INPUT: "reserve 12" means from 1st level, reserve 2nd card 
+        EXAMPLE INPUT: "reserve 20" means from 2nd level, do a blind reserve
+        You MUST enter TWO digits after "reserve" command!
+        """
         level = int(action_string[0]) - 1
         pos = int(action_string[1]) - 1
         self.game.currentPlayer.reserve(self.game, level, pos)
         return True
 
     def do_purchase(self, action_string):
-        """Parse action string and do the 'purchase' action for the current player"""
+        """Usage: purchase XX
+        "X" is digit from 1 to 3
+        EXAMPLE INPUT: "purchase 32" means from 3rd level, purchase 2nd card
+        You MUST enter TWO numbers after "purchase" command!
+        """
         level = int(action_string[0]) - 1
         pos = int(action_string[1]) - 1
         self.game.currentPlayer.purchase(self.game, level, pos)
         return True
 
     def do_hand(self, action_string):
-        """Parse action string and do the 'hand' action for the current player"""
+        """Usage: hand X: purchase from your reserved cards
+        "X" is digits from 1 to 3
+        EXAMPLE INPUT: "hand 1" means purchase 1st card in
+        """
         pos = int(action_string[0]) - 1
         self.game.currentPlayer.purchase(self.game, None, pos)
         return True
 
     def do_sleep(self, line):
-        """Adjust the sleep time for AI"""
+        """Usage: sleep X'
+        Set AI sleep time between X seconds. X can be only between [0.0, 0.5]
+        If no numbers given, prints current AI sleep setting
+        """
         if not line:
-            print("Current sleep setting:", Player.sleepTime)
+            print(f"*** PySplendor: Current AI sleep time is {Player.sleepTime} seconds")
         else:
             duration = float(line)
             if not 0 <= duration <= 0.5:
                 raise ValueError("Sleep duration should be between 0 and 0.5 second")
             Player.sleepTime = duration
-            print(f"AI sleep time is set to {duration} seconds")
-
-    def do_emoji(self, line):
-        """Toggle the emoji setting for gems"""
-        if not line:
-            print("Current emoji setting:", GemDict.emoji)
-        else:
-            flag = bool(int(line))
-            GemDict.emoji = flag
-            print("Gem emojis are", "enabled" if flag else "disabled")
+            print(f"*** PySplendor: AI sleep time is set to {duration} seconds")

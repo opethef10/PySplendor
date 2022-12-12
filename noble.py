@@ -13,9 +13,10 @@ NOBLE_POINTS = 3
 class Noble:
     points: int
     price: GemDict
+    shape = "▲"
 
     def __str__(self):
-        return f"[{self.points}|{self.price}]"
+        return ''.join(amount * GemDict.map_color(gem, self.shape) for gem, amount in self.price.items())
 
     @classmethod
     def get_nobles(cls, max_nobles):

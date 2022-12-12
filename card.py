@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from random import shuffle
 
-from gemdict import GemDict, ALL_GEMS, COLORED_GEMS, COLORS
+from gemdict import GemDict, COLORED_GEMS
 
 cardsCsvPath = Path(__file__).with_name("cards.csv")
 
@@ -13,13 +13,12 @@ class Card:
     color: str = None
     points: int = None
     price: GemDict = None
+    shape = "▮"
         
     def __str__(self):
-        def map_color(gem):
-            return COLORS[ALL_GEMS.index(gem)] if self.price.emoji else gem
         if self.color is None:
-            return "[ ]"
-        return f'[{map_color(self.color)} {self.points}|{self.price}]'
+            return ""
+        return f' {GemDict.map_color(self.color, self.shape):^6}  {self.points:^7} {self.price}'
 
     @classmethod
     def get_cards(cls, max_open_cards):
@@ -33,7 +32,8 @@ class Card:
                 points = int(line[2])
                 price = GemDict()
                 for gem, amount in zip(COLORED_GEMS, line[3:]):
-                    price.update(gem*int(amount))
+                    if int(amount):
+                        price.update({gem: int(amount)})
                 card = cls(color, points, price)
                 card_matrix[level].append(card)
         

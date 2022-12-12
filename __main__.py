@@ -5,7 +5,7 @@ This file parses command line arguments and passes them to CmdUtil
 
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from cmdutil import CmdUtil
-VERSION = "PySplendor 0.9"
+VERSION = "PySplendor 1.0"
 
 if __name__ == "__main__":
     parser = ArgumentParser(
@@ -20,9 +20,6 @@ if __name__ == "__main__":
                         help='Type number of AI players [between 0-4]')
     parser.add_argument('score', metavar='score', type=int, nargs='?', choices=[15, 21], default=15,
                         help='Type the win score [either 15 or 21]')
-    parser.add_argument('--emoji', dest='emoji', action='store_true', help='Sets emoji setting True (default)')
-    parser.add_argument('--no-emoji', dest='emoji', action='store_false', help='Sets emoji setting False')
-    parser.set_defaults(emoji=True)
     parser.add_argument('--sleep', type=float, default=0.2,
                         help='Enter AI sleep parameter in range [0.0, 1.0]')
     args = parser.parse_args()
@@ -34,5 +31,5 @@ if __name__ == "__main__":
         parser.error("Sleep duration should be between 0 and 0.5 second")
 
     # Pass arguments to CmdUtil and start the command line loop
-    app = CmdUtil(args.human, args.ai, args.score, args.emoji, args.sleep)
+    app = CmdUtil(args.human, args.ai, args.score, args.sleep)
     app.cmdloop()
