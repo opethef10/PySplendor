@@ -27,21 +27,24 @@ class SplendorGame:
         self.currentPlayer = next(self._playerIterator)
 
     def __str__(self):
+        width = 60
         st = "\n"
-        st += f"TURN {self.turn}".center(60, "=") + "\n\n"
-        st += f"Current player: {self.currentPlayer.name}\n"
-        st += f"Nobles: {' '.join(str(noble) for noble in self.nobles)}\n"
-        st += f"Board gems: {self.gems}\n\n"
+        st += f"TURN {self.turn}".center(width, "=") + "\n\n"
         st += "# color value  price\n"
         for level, levelCards in reversed(list(enumerate(self.cards))):
-            st += f"Level {level+1} Cards ({len(self.decks[level])} left)".center(60, "-") + "\n"
+            st += f"Level {level+1} Cards ({len(self.decks[level])} left)".center(width, "-") + "\n"
             st += '\n'.join(f"{idx}: {card}" for idx, card in enumerate(levelCards, 1))
             st += '\n'
         st += '\n'
+        st += f"Nobles: {' '.join(str(noble) for noble in self.nobles)}\n"
+        st += f"Board gems: {self.gems}\n\n"
 
         for player in self.players:
-            st += f"{player}\n"
-        st += "".center(60, "=")
+            if player == self.currentPlayer:
+                st += f"--> {player}\n"
+            else:
+                st += f"{player}\n"
+        st += "".center(width, "=")
         st += "\n"
         return st
 
@@ -100,7 +103,7 @@ class SplendorGame:
 
     def available_combinations(self):
         """Available combinations of gems which can be taken"""
-        available_gems = set(self.gems)
+        available_gems = set(+self.gems)
         available_gems.discard(GOLD_GEM)
         available_sets = len(available_gems)
         comb_of_3 = set(map("".join, combinations(available_gems, min(3, available_sets))))

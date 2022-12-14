@@ -54,9 +54,6 @@ class CmdUtil(Cmd):
     def emptyline(self):
         """Ignore when an empty prompt is sent"""
 
-    # def do_help(self, _):
-        # print(self.HELP_STR)
-
     def do_exit(self, _):
         """Exit the game"""
         raise SystemExit()
@@ -95,23 +92,19 @@ class CmdUtil(Cmd):
         return True
 
     def do_purchase(self, action_string):
-        """Usage: purchase XX
-        "X" is digit from 1 to 3
+        """Usage: purchase XY
+        "X" is digit from 0 to 3
+        "Y" is digit from 1 to 3
+        If X is 0, it means you purchase from your reserved cards, otherwise it refers to card levels
         EXAMPLE INPUT: "purchase 32" means from 3rd level, purchase 2nd card
+        EXAMPLE INPUT: "purchase 01" means from your reserved cards, purchase 1st card
         You MUST enter TWO numbers after "purchase" command!
         """
         level = int(action_string[0]) - 1
         pos = int(action_string[1]) - 1
+        if level == -1:
+            level = None
         self.game.currentPlayer.purchase(self.game, level, pos)
-        return True
-
-    def do_hand(self, action_string):
-        """Usage: hand X: purchase from your reserved cards
-        "X" is digits from 1 to 3
-        EXAMPLE INPUT: "hand 1" means purchase 1st card in
-        """
-        pos = int(action_string[0]) - 1
-        self.game.currentPlayer.purchase(self.game, None, pos)
         return True
 
     def do_sleep(self, line):

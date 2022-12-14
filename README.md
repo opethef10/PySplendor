@@ -21,8 +21,8 @@ The differences with original game are:
 ![](screenshot.png)
 
 ## Game Actions
-Inside this command line game, you can perform 7 different actions: 
-* take gems, reserve card, purchase card, purchase hand card, set AI sleep setting, quit, see help.  
+Inside this command line game, you can perform 6 different actions: 
+* take gems, reserve card, purchase card, set AI sleep setting, quit, see help.  
 
 Whenever a prompt asks you to type an input, type one of these actions.
 
@@ -41,15 +41,13 @@ Whenever a prompt asks you to type an input, type one of these actions.
 - **EXAMPLE INPUT**: "reserve 20" means from 2nd level, do a blind reserve
 - You **MUST** enter **TWO** digits after "r"
     
-**purchase XX**: Purchase a card
-- "X" is digit from 1 to 3
-- **EXAMPLE INPUT**: "purchase 33" means from 3rd level, purchase 3rd card
+**purchase XY**: Purchase a card
+"X" is digit from 0 to 3
+"Y" is digit from 1 to 3
+If X is 0, it means you purchase from your reserved cards, otherwise it refers to card levels
+**EXAMPLE INPUT**: "purchase 32" means from 3rd level, purchase 2nd card
+**EXAMPLE INPUT**: "purchase 01" means from your reserved cards, purchase 1st card
 - You **MUST** enter **TWO** numbers after "p"
-    
-**hand X**: Purchase from Hand (from already reserved cards)
-- "X" is digits from 1 to 3
-- **EXAMPLE INPUT**: "hand 1" means purchase 1st card in your hand (the cards you already reserved)
-- You **MUST** enter **ONE** number after "h"
 
 **sleep X**: Set AI sleep time in range of \[0.0, 0.5\] seconds. Default is 0.2 seconds. Without any argument, prints the current setting. Although setting it to 0 seconds not recommended, in order to follow the game, you can use this option for AI vs AI fights.
 
