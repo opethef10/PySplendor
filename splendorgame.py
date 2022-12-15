@@ -36,6 +36,7 @@ class SplendorGame:
             st += '\n'.join(f"{idx}: {card}" for idx, card in enumerate(levelCards, 1))
             st += '\n'
         st += '\n'
+        st += f"Target: {self.rules.WIN_SCORE}\n"
         st += f"Nobles: {' '.join(str(noble) for noble in self.nobles)}\n"
         st += f"Board gems: {self.gems}\n\n"
 
@@ -103,11 +104,9 @@ class SplendorGame:
 
     def available_combinations(self):
         """Available combinations of gems which can be taken"""
-        available_gems = set(+self.gems)
-        available_gems.discard(GOLD_GEM)
+        available_gems = sorted(+self.gems)
+        available_gems.remove(GOLD_GEM)
         available_sets = len(available_gems)
         comb_of_3 = set(map("".join, combinations(available_gems, min(3, available_sets))))
-        comb_of_2 = set(map("".join, combinations(available_gems, min(2, available_sets))))
-        comb_of_1 = available_gems
         comb_of_double = {gem * 2 for gem, count in self.gems.items() if (gem != GOLD_GEM) and (count >= 4)}
-        return comb_of_1 | comb_of_2 | comb_of_3 | comb_of_double
+        return comb_of_3 | comb_of_double

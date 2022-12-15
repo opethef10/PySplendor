@@ -5,7 +5,6 @@ from time import sleep
 
 from account import Account
 from gemdict import GemDict, GOLD_GEM, ALL_GEMS
-from noble import Noble
 
 TAKE, PURCHASE = ('take ', 'purchase ')  # action strings
 
@@ -199,8 +198,8 @@ class AIPlayer(Player):
 
     def possible_moves(self, game):
         gold = self.gems[GOLD_GEM]
-        action_scores = [(-100, TAKE)]
-        available_comb = game.available_combinations()
+        action_scores = {TAKE + comb: -60 for comb in game.available_combinations()}
+        action_scores["reserve 10"] = -50
 
         for level, cards in enumerate(game.cards, 1):
             for pos, card in enumerate(cards, 1):
@@ -209,29 +208,18 @@ class AIPlayer(Player):
                 shortage_gem_dict = card.price - self.wealth
                 gold_shortage = shortage_gem_dict.total() - gold
                 if gold_shortage <= 0:  # affordable card
-                    action = PURCHASE + str(level) + str(pos)  #
-                    score = card.points + 2
-                    action_scores.append((score, action))
+                    action = PURCHASE + str(level) + str(pos)
+                    score = 3 * card.points + 2
+                    action_scores[action] = score
                 else:
-                    short_gems = list(shortage_gem_dict)
-
-                    if len(short_gems) == 1 and shortage_gem_dict[short_gems[0]] > 1:
-                        short_gems = [short_gems[0], short_gems[0]]
-                    elif len(short_gems) > 3:
-                        short_gems = sample(short_gems, 3)
-                    elif len(short_gems) < 3:
-                        possb = list(game.gems.keys())[:5]
-                        possb = list(set(possb) - set(short_gems))
-                        short_gems.extend(sample(possb, 3 - len(short_gems)))
-                    if "".join(sorted(short_gems)) in available_comb:
-                        action = TAKE + ''.join(short_gems)
-                        score = -gold_shortage
-                        if card.points > 0 and gold_shortage < 3:
-                            score += card.points + 2
-                        action_scores.append((score, action))
-                        available_comb.remove("".join(sorted(short_gems)))
-
-        for comb in available_comb:
-            action_scores.append((-60 // (len(comb)), TAKE + comb))
-        action_scores = sorted(action_scores, key=itemgetter(0), reverse=True)
-        return list(map(itemgetter(1), action_scores))
+                    for action in action_scores:
+                        act, possible_gems = action.split()
+                        if act == TAKE.rstrip():
+                            short_gems = shortage_gem_dict - GemDict(possible_gems)
+                            gold_short = short_gems.total() - gold
+                            score = -gold_short
+                            if card.points > 0 and gold_short < 1:
+                                score += card.points + 3
+                            if score > action_scores[action]:
+                                action_scores[action] = score
+        return sorted(action_scores.items(), key=itemgetter(1), reverse=True)
