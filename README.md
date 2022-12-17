@@ -7,8 +7,13 @@ Splendor board game in command line interface.
 
 ## How to Run
 - Download/clone this repository
-- Install dependencies with ```pip install -r requirements.txt```
-- run [\_\_main\_\_.py](__main__.py) with Python.
+- Install dependencies with ```python -m pip install -r requirements.txt```
+- Run [\_\_main\_\_.py](__main__.py) with Python: ```python __main__.py```
+- This starts default game with 1 human player vs 1 AI player
+- For different command line options, see ```python __main__.py --help```
+
+## How to Run Online
+- You can play the game online without any download by clicking **Run** in [Repl.it](https://replit.com/@onurarikan/PySplendor-v10?embed=1&output=1)
 
 ## How to Play?
 This game is based in Splendor. You can learn the actual rules of the game from [here.](https://www.ultraboardgames.com/splendor/game-rules.php)  

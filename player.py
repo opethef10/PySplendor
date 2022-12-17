@@ -222,4 +222,4 @@ class AIPlayer(Player):
                                 score += card.points + 3
                             if score > action_scores[action]:
                                 action_scores[action] = score
-        return sorted(action_scores.items(), key=itemgetter(1), reverse=True)
+        return list(dict(sorted(action_scores.items(), key=itemgetter(1), reverse=True)))

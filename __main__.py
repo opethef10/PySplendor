@@ -21,7 +21,7 @@ if __name__ == "__main__":
     parser.add_argument('score', metavar='score', type=int, nargs='?', choices=[15, 21], default=15,
                         help='Type the win score [either 15 or 21]')
     parser.add_argument('--sleep', type=float, default=0.2,
-                        help='Enter AI sleep parameter in range [0.0, 1.0]')
+                        help='Enter AI sleep parameter in range [0.0, 0.5]')
     args = parser.parse_args()
 
     if not 2 <= args.human + args.ai <= 4:
